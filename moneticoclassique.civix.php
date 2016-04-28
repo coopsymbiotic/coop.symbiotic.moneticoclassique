@@ -5,7 +5,7 @@
 /**
  * (Delegated) Implementation of hook_civicrm_config
  */
-function _cmcic_civix_civicrm_config(&$config = NULL) {
+function _moneticoclassique_civix_civicrm_config(&$config = NULL) {
   static $configured = FALSE;
   if ($configured) return;
   $configured = TRUE;
@@ -30,8 +30,8 @@ function _cmcic_civix_civicrm_config(&$config = NULL) {
  *
  * @param $files array(string)
  */
-function _cmcic_civix_civicrm_xmlMenu(&$files) {
-  foreach (_cmcic_civix_glob(__DIR__ . '/xml/Menu/*.xml') as $file) {
+function _moneticoclassique_civix_civicrm_xmlMenu(&$files) {
+  foreach (_moneticoclassique_civix_glob(__DIR__ . '/xml/Menu/*.xml') as $file) {
     $files[] = $file;
   }
 }
@@ -39,9 +39,9 @@ function _cmcic_civix_civicrm_xmlMenu(&$files) {
 /**
  * Implementation of hook_civicrm_install
  */
-function _cmcic_civix_civicrm_install() {
-  _cmcic_civix_civicrm_config();
-  if ($upgrader = _cmcic_civix_upgrader()) {
+function _moneticoclassique_civix_civicrm_install() {
+  _moneticoclassique_civix_civicrm_config();
+  if ($upgrader = _moneticoclassique_civix_upgrader()) {
     return $upgrader->onInstall();
   }
 }
@@ -49,9 +49,9 @@ function _cmcic_civix_civicrm_install() {
 /**
  * Implementation of hook_civicrm_uninstall
  */
-function _cmcic_civix_civicrm_uninstall() {
-  _cmcic_civix_civicrm_config();
-  if ($upgrader = _cmcic_civix_upgrader()) {
+function _moneticoclassique_civix_civicrm_uninstall() {
+  _moneticoclassique_civix_civicrm_config();
+  if ($upgrader = _moneticoclassique_civix_upgrader()) {
     return $upgrader->onUninstall();
   }
 }
@@ -59,9 +59,9 @@ function _cmcic_civix_civicrm_uninstall() {
 /**
  * (Delegated) Implementation of hook_civicrm_enable
  */
-function _cmcic_civix_civicrm_enable() {
-  _cmcic_civix_civicrm_config();
-  if ($upgrader = _cmcic_civix_upgrader()) {
+function _moneticoclassique_civix_civicrm_enable() {
+  _moneticoclassique_civix_civicrm_config();
+  if ($upgrader = _moneticoclassique_civix_upgrader()) {
     if (is_callable(array($upgrader, 'onEnable'))) {
       return $upgrader->onEnable();
     }
@@ -71,9 +71,9 @@ function _cmcic_civix_civicrm_enable() {
 /**
  * (Delegated) Implementation of hook_civicrm_disable
  */
-function _cmcic_civix_civicrm_disable() {
-  _cmcic_civix_civicrm_config();
-  if ($upgrader = _cmcic_civix_upgrader()) {
+function _moneticoclassique_civix_civicrm_disable() {
+  _moneticoclassique_civix_civicrm_config();
+  if ($upgrader = _moneticoclassique_civix_upgrader()) {
     if (is_callable(array($upgrader, 'onDisable'))) {
       return $upgrader->onDisable();
     }
@@ -89,17 +89,17 @@ function _cmcic_civix_civicrm_disable() {
  * @return mixed  based on op. for 'check', returns array(boolean) (TRUE if upgrades are pending)
  *                for 'enqueue', returns void
  */
-function _cmcic_civix_civicrm_upgrade($op, CRM_Queue_Queue $queue = NULL) {
-  if ($upgrader = _cmcic_civix_upgrader()) {
+function _moneticoclassique_civix_civicrm_upgrade($op, CRM_Queue_Queue $queue = NULL) {
+  if ($upgrader = _moneticoclassique_civix_upgrader()) {
     return $upgrader->onUpgrade($op, $queue);
   }
 }
 
-function _cmcic_civix_upgrader() {
-  if (!file_exists(__DIR__.'/CRM/Cmcic/Upgrader.php')) {
+function _moneticoclassique_civix_upgrader() {
+  if (!file_exists(__DIR__.'/CRM/Monetico/Upgrader.php')) {
     return NULL;
   } else {
-    return CRM_Cmcic_Upgrader_Base::instance();
+    return CRM_Monetico_Upgrader_Base::instance();
   }
 }
 
@@ -113,7 +113,7 @@ function _cmcic_civix_upgrader() {
  * @param $pattern string, glob pattern, eg "*.txt"
  * @return array(string)
  */
-function _cmcic_civix_find_files($dir, $pattern) {
+function _moneticoclassique_civix_find_files($dir, $pattern) {
   if (is_callable(array('CRM_Utils_File', 'findFiles'))) {
     return CRM_Utils_File::findFiles($dir, $pattern);
   }
@@ -122,7 +122,7 @@ function _cmcic_civix_find_files($dir, $pattern) {
   $result = array();
   while (!empty($todos)) {
     $subdir = array_shift($todos);
-    foreach (_cmcic_civix_glob("$subdir/$pattern") as $match) {
+    foreach (_moneticoclassique_civix_glob("$subdir/$pattern") as $match) {
       if (!is_dir($match)) {
         $result[] = $match;
       }
@@ -145,13 +145,13 @@ function _cmcic_civix_find_files($dir, $pattern) {
  *
  * Find any *.mgd.php files, merge their content, and return.
  */
-function _cmcic_civix_civicrm_managed(&$entities) {
-  $mgdFiles = _cmcic_civix_find_files(__DIR__, '*.mgd.php');
+function _moneticoclassique_civix_civicrm_managed(&$entities) {
+  $mgdFiles = _moneticoclassique_civix_find_files(__DIR__, '*.mgd.php');
   foreach ($mgdFiles as $file) {
     $es = include $file;
     foreach ($es as $e) {
       if (empty($e['module'])) {
-        $e['module'] = 'nz.co.fuzion.cmcic';
+        $e['module'] = 'coop.symbiotic.moneticoclassique';
       }
       $entities[] = $e;
     }
@@ -165,12 +165,12 @@ function _cmcic_civix_civicrm_managed(&$entities) {
  *
  * Note: This hook only runs in CiviCRM 4.4+.
  */
-function _cmcic_civix_civicrm_caseTypes(&$caseTypes) {
+function _moneticoclassique_civix_civicrm_caseTypes(&$caseTypes) {
   if (!is_dir(__DIR__ . '/xml/case')) {
     return;
   }
 
-  foreach (_cmcic_civix_glob(__DIR__ . '/xml/case/*.xml') as $file) {
+  foreach (_moneticoclassique_civix_glob(__DIR__ . '/xml/case/*.xml') as $file) {
     $name = preg_replace('/\.xml$/', '', basename($file));
     if ($name != CRM_Case_XMLProcessor::mungeCaseType($name)) {
       $errorMessage = sprintf("Case-type file name is malformed (%s vs %s)", $name, CRM_Case_XMLProcessor::mungeCaseType($name));
@@ -178,7 +178,7 @@ function _cmcic_civix_civicrm_caseTypes(&$caseTypes) {
       // throw new CRM_Core_Exception($errorMessage);
     }
     $caseTypes[$name] = array(
-      'module' => 'nz.co.fuzion.cmcic',
+      'module' => 'coop.symbiotic.moneticoclassique',
       'name' => $name,
       'file' => $file,
     );
@@ -197,7 +197,7 @@ function _cmcic_civix_civicrm_caseTypes(&$caseTypes) {
  * @param string $pattern
  * @return array, possibly empty
  */
-function _cmcic_civix_glob($pattern) {
+function _moneticoclassique_civix_glob($pattern) {
   $result = glob($pattern);
   return is_array($result) ? $result : array();
 }
@@ -210,7 +210,7 @@ function _cmcic_civix_glob($pattern) {
  * $item - menu you need to insert (parent/child attributes will be filled for you)
  * $parentId - used internally to recurse in the menu structure
  */
-function _cmcic_civix_insert_navigation_menu(&$menu, $path, $item, $parentId = NULL) {
+function _moneticoclassique_civix_insert_navigation_menu(&$menu, $path, $item, $parentId = NULL) {
   static $navId;
 
   // If we are done going down the path, insert menu
@@ -234,7 +234,7 @@ function _cmcic_civix_insert_navigation_menu(&$menu, $path, $item, $parentId = N
     foreach ($menu as $key => &$entry) {
       if ($entry['attributes']['name'] == $first) {
         if (!$entry['child']) $entry['child'] = array();
-        $found = _cmcic_civix_insert_navigation_menu($entry['child'], implode('/', $path), $item, $key);
+        $found = _moneticoclassique_civix_insert_navigation_menu($entry['child'], implode('/', $path), $item, $key);
       }
     }
     return $found;

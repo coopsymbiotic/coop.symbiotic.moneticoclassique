@@ -1,13 +1,10 @@
 <?php
 
-class CRM_Core_Payment_Cmcic extends CRM_Core_Payment{
-  CONST CHARSET = 'iso-8859-1';
-
+class CRM_Core_Payment_Monetico extends CRM_Core_Payment {
   protected $_mode = NULL;
-
   protected $_key = '';
+  protected $_algorithm = 'sha1';
 
-  protected $_algorithm = 'md5';
   /**
    * We only need one instance of this object. So we use the singleton
    * pattern and cache the instance in this variable
@@ -28,10 +25,10 @@ class CRM_Core_Payment_Cmcic extends CRM_Core_Payment{
 
     $this->_mode = $mode;
     $this->_key = $paymentProcessor['password'];
-    $this->_algorithm = empty($paymentProcessor['subject']) ? 'md5' : $paymentProcessor['subject'];
+    $this->_algorithm = empty($paymentProcessor['subject']) ? 'sha1' : $paymentProcessor['subject'];
 
     $this->_paymentProcessor = $paymentProcessor;
-    $this->_processorName = ts('CMCIC');
+    $this->_processorName = ts('Monetico');
   }
 
   /**
@@ -46,7 +43,7 @@ class CRM_Core_Payment_Cmcic extends CRM_Core_Payment{
   static function &singleton($mode = 'test', &$paymentProcessor, &$paymentForm = NULL, $force = FALSE) {
     $processorName = $paymentProcessor['name'];
     if (self::$_singleton[$processorName] === NULL) {
-      self::$_singleton[$processorName] = new CRM_Core_Payment_Cmcic($mode, $paymentProcessor);
+      self::$_singleton[$processorName] = new CRM_Core_Payment_Monetico($mode, $paymentProcessor);
     }
     return self::$_singleton[$processorName];
   }
@@ -131,8 +128,10 @@ class CRM_Core_Payment_Cmcic extends CRM_Core_Payment{
     elseif ($component == 'contribute') {
       $merchantRef = $params['contactID'] . "-" . $params['contributionID'];// . " " . substr($params['description'], 20, 20), 0, 24);
     }
+
     $emailFields  = array('email', 'email-Primary', 'email-5');
     $email = '';
+
     foreach ($emailFields as $emailField) {
       if(!empty($params[$emailField])) {
         $email = $params[$emailField];
@@ -289,9 +288,11 @@ class CRM_Core_Payment_Cmcic extends CRM_Core_Payment{
     $dao = CRM_Core_DAO::executeQuery("INSERT INTO civicrm_notification_log (message_raw, message_type) VALUES (%1, 'cmcic')",
       array(1 => array(json_encode($_REQUEST), 'String'))
     );
-    $ipn = new CRM_Core_Payment_CmcicIPN(array_merge($_REQUEST, array('exit_mode' => TRUE)));
+
+    $ipn = new CRM_Core_Payment_MoneticoIPN(array_merge($_REQUEST, array('exit_mode' => TRUE)));
     $ipn->main();
-    //if for any reason we come back here
+
+    // If for any reason we come back here
     CRM_Core_Error::debug_log_message( "It should not be possible to reach this line" );
   }
 }

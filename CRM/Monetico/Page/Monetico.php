@@ -1,6 +1,6 @@
 <?php
 
-class CRM_Cmcic_Page_Cmcic extends CRM_Core_Page{
+class CRM_Monetico_Page_Monetico extends CRM_Core_Page {
   function run() {
     $params = array();
     $fields = array(

@@ -1,6 +1,6 @@
 <?php
 
-class CRM_Core_Payment_CmcicIPN extends CRM_Core_Payment_BaseIPN{
+class CRM_Core_Payment_MoneticoIPN extends CRM_Core_Payment_BaseIPN {
 
   static $_paymentProcessor = NULL;
 
@@ -132,21 +132,22 @@ class CRM_Core_Payment_CmcicIPN extends CRM_Core_Payment_BaseIPN{
   function main() {
     $paymentProcessor = civicrm_api3('payment_processor', 'getsingle', array('id' => $this->retrieve('processor_id', 'Integer', TRUE)));
     //we say contribute here as a dummy param as we are using the api to complete & we don't need to know
-    $this->_paymentProcessor = new CRM_Core_Payment_Cmcic('contribute', $paymentProcessor);
-    if(!$this->cmcic_validate_response()) {
+    $this->_paymentProcessor = new CRM_Core_Payment_Monetico('contribute', $paymentProcessor);
+
+    if (!$this->cmcic_validate_response()) {
       $this->cmcic_receipt_exit(FALSE);
       return;
     }
 
-    //since we have done MAC validation we can assume it is all good & just use the api to complete
+    // since we have done MAC validation we can assume it is all good & just use the api to complete
     // based on the contribution id
     $successfulResults = array('payetest', 'paiement');
     $resultCode = $this->retrieve('code-retour', 'String');
     $contributionID = $this->retrieve('reference', 'Integer');
     $trxn_id = $contributionID . '-' . $this->retrieve('numauto', 'String');
 
-    if(in_array($resultCode, $successfulResults)) {
-      if($resultCode == 'payetest') {
+    if (in_array($resultCode, $successfulResults)) {
+      if ($resultCode == 'payetest') {
         $trxn_id = 'test' . $contributionID . uniqid();
       }
       civicrm_api3('contribution', 'completetransaction', array(

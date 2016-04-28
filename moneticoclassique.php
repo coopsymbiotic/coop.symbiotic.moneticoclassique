@@ -1,12 +1,12 @@
 <?php
 
-require_once 'cmcic.civix.php';
+require_once 'moneticoclassique.civix.php';
 
 /**
  * Implementation of hook_civicrm_config
  */
-function cmcic_civicrm_config(&$config) {
-  _cmcic_civix_civicrm_config($config);
+function moneticoclassique_civicrm_config(&$config) {
+  _moneticoclassique_civix_civicrm_config($config);
 }
 
 /**
@@ -14,36 +14,36 @@ function cmcic_civicrm_config(&$config) {
  *
  * @param $files array(string)
  */
-function cmcic_civicrm_xmlMenu(&$files) {
-  _cmcic_civix_civicrm_xmlMenu($files);
+function moneticoclassique_civicrm_xmlMenu(&$files) {
+  _moneticoclassique_civix_civicrm_xmlMenu($files);
 }
 
 /**
  * Implementation of hook_civicrm_install
  */
-function cmcic_civicrm_install() {
-  return _cmcic_civix_civicrm_install();
+function moneticoclassique_civicrm_install() {
+  return _moneticoclassique_civix_civicrm_install();
 }
 
 /**
  * Implementation of hook_civicrm_uninstall
  */
-function cmcic_civicrm_uninstall() {
-  return _cmcic_civix_civicrm_uninstall();
+function moneticoclassique_civicrm_uninstall() {
+  return _moneticoclassique_civix_civicrm_uninstall();
 }
 
 /**
  * Implementation of hook_civicrm_enable
  */
-function cmcic_civicrm_enable() {
-  return _cmcic_civix_civicrm_enable();
+function moneticoclassique_civicrm_enable() {
+  return _moneticoclassique_civix_civicrm_enable();
 }
 
 /**
  * Implementation of hook_civicrm_disable
  */
-function cmcic_civicrm_disable() {
-  return _cmcic_civix_civicrm_disable();
+function moneticoclassique_civicrm_disable() {
+  return _moneticoclassique_civix_civicrm_disable();
 }
 
 /**
@@ -55,8 +55,8 @@ function cmcic_civicrm_disable() {
  * @return mixed  based on op. for 'check', returns array(boolean) (TRUE if upgrades are pending)
  *                for 'enqueue', returns void
  */
-function cmcic_civicrm_upgrade($op, CRM_Queue_Queue $queue = NULL) {
-  return _cmcic_civix_civicrm_upgrade($op, $queue);
+function moneticoclassique_civicrm_upgrade($op, CRM_Queue_Queue $queue = NULL) {
+  return _moneticoclassique_civix_civicrm_upgrade($op, $queue);
 }
 
 /**
@@ -65,8 +65,8 @@ function cmcic_civicrm_upgrade($op, CRM_Queue_Queue $queue = NULL) {
  * Generate a list of entities to create/deactivate/delete when this module
  * is installed, disabled, uninstalled.
  */
-function cmcic_civicrm_managed(&$entities) {
-  return _cmcic_civix_civicrm_managed($entities);
+function moneticoclassique_civicrm_managed(&$entities) {
+  return _moneticoclassique_civix_civicrm_managed($entities);
 }
 
 /**
@@ -76,6 +76,6 @@ function cmcic_civicrm_managed(&$entities) {
  *
  * Note: This hook only runs in CiviCRM 4.4+.
  */
-function cmcic_civicrm_caseTypes(&$caseTypes) {
-  _cmcic_civix_civicrm_caseTypes($caseTypes);
+function moneticoclassique_civicrm_caseTypes(&$caseTypes) {
+  _moneticoclassique_civix_civicrm_caseTypes($caseTypes);
 }

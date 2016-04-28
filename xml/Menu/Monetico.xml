@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<menu>
+  <item>
+     <path>civicrm/monetico</path>
+     <page_callback>CRM_Monetico_Page_Monetico</page_callback>
+     <access_callback>1</access_callback>
+  </item>
+</menu>
