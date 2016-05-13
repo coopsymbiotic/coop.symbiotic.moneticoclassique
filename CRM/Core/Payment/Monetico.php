@@ -123,10 +123,10 @@ class CRM_Core_Payment_Monetico extends CRM_Core_Payment {
     ));
 
     if ($component == 'event') {
-      $merchantRef = $params['contactID'] . "-" . $params['description'];//, 27, 20), 0, 24);
+      $merchantRef = $params['contactID'] . "-" . $params['eventID'];
     }
     elseif ($component == 'contribute') {
-      $merchantRef = $params['contactID'] . "-" . $params['contributionID'];// . " " . substr($params['description'], 20, 20), 0, 24);
+      $merchantRef = $params['contactID'] . "-" . $params['contributionID'];
     }
 
     $emailFields  = array('email', 'email-Primary', 'email-5');
