@@ -2,48 +2,21 @@
 
 class CRM_Monetico_Page_Monetico extends CRM_Core_Page {
   function run() {
-    $params = array();
-    $fields = array(
-      'version',
-      'TPE',
-      'date',
-      'montant',
-      'reference',
-      'url_retour',
-      'url_retour_ok',
-      'url_retour_err',
-      'lgue',
-      'societe',
-      'texte-libre',
-      'mail',
-      'MAC',
-    );
-    foreach ($fields as $field) {
-      $params[$field] = CRM_Utils_Request::retrieve($field, 'String');
-    }
-    $this->assign('fields', $params);
-    $this->assign('url', CRM_Utils_Request::retrieve('submit_to', 'String'));
-    $smarty = CRM_Core_Smarty::singleton();
-    echo $smarty->fetch("string:" . $this->getText());
-    die;
-    parent::run();
+    /**
+     * NEEDS REVIEW
+     *
+     * The CMC_IC extension used this class to generate a mini-form,
+     * which Monetico does not seem to support. Using this instead to
+     * declare a webhook and process the IPN.
+     *
+     * CiviCRM normally has another entry-point to validate IPNs,
+     * but could not understand the documentation on the issue.
+     */
+
+    $ipn = new CRM_Core_Payment_MoneticoIPN(array_merge($_REQUEST, array('exit_mode' => TRUE)));
+    $ipn->main();
+
+    die();
   }
 
-  /**
-   * we are trying this quick retrieval in the hope of a quicker form
-   * @return string
-   */
-  function getText() {
-    return "<p>" . ts('Please Click the pay now button if you are not automatically redirected') . '</p>
-<form method="post" id="form" name="CMCICFormulaire"
-target="_top" action="{$url}">
-{foreach from=$fields key=k item=field}
-  <input type="hidden" name="{$k}" value="{$field}">
-{/foreach}
-<input type="submit" name="bouton" value="' . ts('Pay Now') . '">
-</form>
-<script type="text/javascript">
-document.getElementById("form").submit();
-</script>';
-  }
 }

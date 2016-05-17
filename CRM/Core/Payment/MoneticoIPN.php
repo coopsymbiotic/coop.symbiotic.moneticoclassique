@@ -130,11 +130,31 @@ class CRM_Core_Payment_MoneticoIPN extends CRM_Core_Payment_BaseIPN {
    * @return void|boolean|Ambigous <void, boolean>
    */
   function main() {
-    $paymentProcessor = civicrm_api3('payment_processor', 'getsingle', array('id' => $this->retrieve('processor_id', 'Integer', TRUE)));
+    // [ML] This is not finding the processor_id, not sure why?
+    // $paymentProcessor = civicrm_api3('payment_processor', 'getsingle', array('id' => $this->retrieve('processor_id', 'Integer', TRUE)));
+
+    // [ML] On the other hand, this is probably overkill:
+    // - we fetch the contribution in order to know if this is a test transaction
+    // - the way the payment processor is fetched will cause problems if there
+    //   are multiple accounts active on the same site (unlikely, but still..).
+    $contributionID = $this->retrieve('reference', 'Integer');
+
+    $is_test = civicrm_api3('Contribution', 'getsingle', array(
+      'id' => $contributionID,
+      'return.is_test' => 1,
+    ));
+
+    $paymentProcessor = civicrm_api3('payment_processor', 'getsingle', array(
+      'class_name' => 'Payment_Monetico',
+      'is_active' => 1,
+      'is_test' => $is_test['is_test'],
+    ));
+
     //we say contribute here as a dummy param as we are using the api to complete & we don't need to know
     $this->_paymentProcessor = new CRM_Core_Payment_Monetico('contribute', $paymentProcessor);
 
     if (!$this->cmcic_validate_response()) {
+      Civi::log()->warning('Transaction verification failed {id}', array('id' => $contributionID));
       $this->cmcic_receipt_exit(FALSE);
       return;
     }
