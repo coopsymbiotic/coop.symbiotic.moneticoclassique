@@ -91,9 +91,9 @@ class CRM_Core_Payment_Monetico extends CRM_Core_Payment {
     if ($component == 'event') {
       $baseURL = 'civicrm/event/register';
       $cancelURL = urlencode(CRM_Utils_System::url($baseURL, array(
-        'reset' => 1,
         'cc' => 'fail',
-        'participantId' => $orderID[4],
+        '_qf_Register_display' => 'true',
+        'qfKey' => $params['qfKey'],
       ),
       TRUE, NULL, FALSE
       ));
@@ -140,7 +140,7 @@ class CRM_Core_Payment_Monetico extends CRM_Core_Payment {
     $lang = $this->getLanguage();
 
     $paymentParams = array(
-      'url_retour' => $returnURL,
+      'url_retour' => $returnUrl,
       'submit_to' => $this->_paymentProcessor['url_site'],
       'url_retour_ok' => $returnOKURL,
       'url_retour_err' => $cancelURL,
@@ -187,7 +187,7 @@ class CRM_Core_Payment_Monetico extends CRM_Core_Payment {
   function urlEncodeField($value, $fieldlength) {
     //@todo - we need to do more testing about the encoding - at this stage we have stopped
     // passing description strings until we can sort
-    return htmlentities(substr($value, $length));
+    return htmlentities(substr($value, $fieldlength));
 
     /**
     $string = substr(rawurlencode($value), 0, $fieldlength);
