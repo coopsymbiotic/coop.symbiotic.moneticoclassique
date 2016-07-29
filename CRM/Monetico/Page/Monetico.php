@@ -16,7 +16,7 @@ class CRM_Monetico_Page_Monetico extends CRM_Core_Page {
     $ipn = new CRM_Core_Payment_MoneticoIPN(array_merge($_REQUEST, array('exit_mode' => TRUE)));
     $ipn->main();
 
-    die();
+    CRM_Utils_System::civiExit();
   }
 
 }
