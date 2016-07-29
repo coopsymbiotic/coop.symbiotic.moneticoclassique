@@ -154,7 +154,7 @@ class CRM_Core_Payment_Monetico extends CRM_Core_Payment {
         //@todo - get language code
         'lgue' => $lang,
         'societe' => $this->_paymentProcessor['signature'],
-        'mail' => $email,
+        'mail' => $this->fixEmail($email),
       ),
     );
 
@@ -200,25 +200,44 @@ class CRM_Core_Payment_Monetico extends CRM_Core_Payment {
   }
 
   /**
-   * calculate MAC key
+   * Format the email in the expected format by Monetico.
+   * Mostly to workaround a specific bug, but if the email does
+   * not match, the HMAC calculated by Monetico will not match ours.
+   *
+   * @param string $email
+   * @return string
+   */
+  function fixEmail($email) {
+    // Ex: bgm+test1@example.org => 'bgm test1@example.org'
+    return str_replace('+', ' ', $email);
+  }
+
+  /**
+   * Calculate MAC key, by hashing the data sent with the TPE key.
+   *
    * @param unknown $key
    * @param unknown $params
    * @param unknown $algorithm
    * @return string
    */
   private function encodeMac($params) {
+    // Each data field must be separated by a '*'.
+    // The last 10 fields are for delayed/partial payments, hence the 10 '*' below.
     $string = implode('*', $params) . '**********';
-    return hash_hmac($this->getAlgorithm(), $string, $this->getKey());
+
+    return strtolower(hash_hmac($this->getAlgorithm(), $string, $this->getKey()));
   }
 
   /**
-   * format key - adapted from drupal commerce module
+   * Format the TPE key in a usable format for the HMAC function.
+   * Adapted from the code examples from CMCIC/Monetico.
+   *
    * @param unknown $key
    * @return string
    */
   private function getUsableKey($key) {
-    $hex_str_key  = substr($key, 0, 38);
-    $hex_final   = "" . substr($key, 38, 2) . "00";
+    $hex_str_key = substr($key, 0, 38);
+    $hex_final = "" . substr($key, 38, 2) . "00";
 
     $cca0 = ord($hex_final);
 
@@ -233,9 +252,9 @@ class CRM_Core_Payment_Monetico extends CRM_Core_Payment {
         $hex_str_key .= substr($hex_final, 0, 2);
       }
     }
+
     return pack("H*", $hex_str_key);
   }
-
 
   /**
    * Get language string -Size: 2 characters
