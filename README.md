@@ -9,6 +9,16 @@ For more information about this payment gateway, see:
 * http://www.monetico.ca/en/payment-solutions/online-payment/
 * http://assistance.monetico.ca/en/online-payment/classic-package
 
+This payment solution is available by default when using Coop SymbioTIC's
+turn-key hosting. As a certified Monetico partner, we support all of the
+Monetico payment solutions, including those covered by this extension:
+Turnkey and Classic.
+
+For more information on our hosting:
+
+* English: https://www.symbiotic.coop/en/turn-key-civicrm-hosting
+* French: https://www.symbiotic.coop/fr/hebergement-civicrm-cle-en-main
+
 To get the latest version of this extension:  
 https://github.com/coopsymbiotic/coop.symbiotic.moneticoclassique
 
@@ -43,15 +53,17 @@ Support
 Please post bug reports in the issue tracker of this project on github:  
 https://github.com/coopsymbiotic/coop.symbiotic.moneticoclassique
 
-For general support questions, please post on CiviCRM's Stack Exchange:  
-http://civicrm.stackexchange.com/ (tag your question with "Monetico")
-
 Commercial support is available from Coop SymbioTIC:  
 https://www.symbiotic.coop
 
 Coop SymbioTIC is a certified Monetico/Desjardins partner and "turnkey"
 provider. We provide turn-key CiviCRM hosting for non-profits in Quebec/Canada:  
 http://assistance.monetico.ca/fr/partenaires
+
+For more information on our hosting:
+
+* English: https://www.symbiotic.coop/en/turn-key-civicrm-hosting
+* French: https://www.symbiotic.coop/fr/hebergement-civicrm-cle-en-main
 
 Copyright
 ---------
