@@ -8,15 +8,14 @@
     <author>Mathieu Lutfy</author>
     <email>mathieu@symbiotic.coop</email>
   </maintainer>
-  <releaseDate>2016-04-01</releaseDate>
-  <version>1.0</version>
+  <releaseDate>2017-10-10</releaseDate>
+  <version>1.1</version>
   <develStage>alpha</develStage>
   <compatibility>
     <ver>4.6</ver>
     <ver>4.7</ver>
   </compatibility>
-  <comments>CiviCRM Payment processor for Monetico (Desjardins/CMCIC). You need to configure the return url with your bank to
-  https://yoursite/civicrm/payment/ipn?processor_id=x where x is your id</comments>
+  <comments>CiviCRM Payment processor for Desjardins/Monetico.</comments>
   <civix>
     <namespace>CRM/Monetico</namespace>
   </civix>
