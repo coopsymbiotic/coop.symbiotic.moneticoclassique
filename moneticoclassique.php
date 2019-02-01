@@ -79,3 +79,23 @@ function moneticoclassique_civicrm_managed(&$entities) {
 function moneticoclassique_civicrm_caseTypes(&$caseTypes) {
   _moneticoclassique_civix_civicrm_caseTypes($caseTypes);
 }
+
+/**
+ * Implements hook_civicrm_buildForm().
+ *
+ * Set a default value for an event price set field.
+ *
+ * @param string $formName
+ * @param CRM_Core_Form $form
+ */
+function moneticoclassique_civicrm_buildForm($formName, &$form) {
+  if (($formName == 'CRM_Contribute_Form_Contribution_Main')) {
+    $is_cancel = CRM_Utils_Request::retrieveValue('cancel', 'Positive');
+    if ($is_cancel) {
+      // display an error
+      CRM_Core_Session::setStatus(ts('Sorry, your transaction has failed.', ['domain' => 'coop.symbiotic.moneticoclassique']));
+    }
+  }
+
+}
+
